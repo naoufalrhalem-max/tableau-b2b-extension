@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B2B Marketing Attribution — Custom Visuals</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#f4f6fb; --card:#fff; --text:#1e2a3a; --muted:#7a8aa0; --accent:#2f6feb;
+    --border:#e3e8f0; --green:#1f9d55; --red:#e5484d; --amber:#f5a623;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);padding:14px;line-height:1.5;overflow:auto}
+  header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+  header h1{font-size:20px;font-weight:700;color:#193153}
+  header p{color:var(--muted);font-size:12px}
+  #status{font-size:12px;color:var(--muted)}
+  #status.ok{color:var(--green)}
+
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+  .kpi{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;box-shadow:0 1px 3px rgba(20,40,80,.06)}
+  .kpi .label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;font-weight:600}
+  .kpi .value{font-size:26px;font-weight:700;margin-top:5px;color:var(--accent)}
+  .kpi .sub{font-size:11px;color:var(--muted);margin-top:3px}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;box-shadow:0 1px 3px rgba(20,40,80,.06)}
+  .card.full{grid-column:1/-1}
+  .card h2{font-size:13px;font-weight:600;color:#193153;margin-bottom:10px}
+  .chart-wrap{position:relative;height:240px}
+
+  .heat{width:100%;border-collapse:collapse;font-size:11px}
+  .heat th,.heat td{padding:4px 6px;border:1px solid var(--border);text-align:center}
+  .heat th{color:var(--muted);font-weight:600;font-size:10px;text-transform:uppercase}
+  .heat tr th:first-child,.heat td:first-child{text-align:left;white-space:nowrap}
+
+  @media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}}
+  .toggle{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+  .toggle button{border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-weight:600}
+  .toggle button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .scope{color:var(--muted);font-size:12px;margin-bottom:12px}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>B2B Marketing Attribution</h1>
+    <p>Custom visuals — With vs Without Field Actions</p>
+  </div>
+  <div id="status">Connecting to Tableau…</div>
+</header>
+
+<div class="toggle" id="modeFilter"></div>
+<div class="scope" id="scopeInfo"></div>
+
+<div class="kpi-grid" id="kpiGrid">
+  <div class="kpi"><div class="label">Dispatches</div><div class="value">–</div></div>
+  <div class="kpi"><div class="label">Orders</div><div class="value">–</div></div>
+  <div class="kpi"><div class="label">Placements</div><div class="value">–</div></div>
+  <div class="kpi"><div class="label">Revenue</div><div class="value">–</div></div>
+</div>
+
+<div class="grid">
+  <div class="card full"><h2>With vs Without Field Actions — Orders / Placements / Revenue</h2>
+    <div class="chart-wrap"><canvas id="byModeChart"></canvas></div></div>
+  <div class="card"><h2>Dispatches by Opco</h2>
+    <div class="chart-wrap"><canvas id="opcoChart"></canvas></div></div>
+  <div class="card"><h2>Dispatches by Lead Type</h2>
+    <div class="chart-wrap"><canvas id="typeChart"></canvas></div></div>
+  <div class="card full"><h2>Dispatches — Orders by Mode (raw values)</h2>
+    <div class="chart-wrap"><canvas id="ordersChart"></canvas></div></div>
+  <div class="card full"><h2>Dispatches by Opco x Lead Type</h2>
+    <div style="overflow:auto"><table class="heat" id="heatTable"></table></div></div>
+</div>
+
+<script src="https://extensions.tableau.com/v1/tableau.extensions.1.latest.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
